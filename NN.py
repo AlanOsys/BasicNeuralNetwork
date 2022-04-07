@@ -14,14 +14,26 @@ class NeuralNetwork():
         return x * ( 1-x)
 
     def train(self,training_inputs,training_outputs,training_iterations):
+        global arr
+        global arr2
+        global arr3
+        global arr4
+        global arr5
+        arr = np.zeros(10000)
+        arr2 = np.zeros(10000)
+        arr3 = np.zeros(10000)
+        arr4 = np.zeros(10000)
+        arr5 = np.zeros(10000)
         
         for iteration in range(training_iterations):
             output = self.think(training_inputs)
             error = training_outputs - output
             adjustments = np.dot(training_inputs.T, error*self.sigmoid_derivative(output))
             self.synaptic_weigths += adjustments
-            plt.plot(training_inputs,training_outputs)
-            #print(adjustments[2])
+            arr[iteration] = self.synaptic_weigths[0]
+            arr2[iteration] = self.synaptic_weigths[1]
+            arr3[iteration] = self.synaptic_weigths[2]
+            arr4[iteration] = self.synaptic_weigths[3]
 
 
     def think(self, inputs):
@@ -31,11 +43,8 @@ class NeuralNetwork():
 
 
 if __name__ == '__main__':
+    
     neural_network = NeuralNetwork()
-
-    print("Random synaptic weights: ")
-    print(neural_network.synaptic_weigths)
-
     training_inputs = np.array([
     [0,0,1,1],
     [1,1,1,0],
@@ -45,15 +54,15 @@ if __name__ == '__main__':
     ])
     training_outputs = np.array([[0,1,1,0,1]]).T
     neural_network.train(training_inputs,training_outputs, 10000)
-
-    print("Synaptic weights after trainging: ")
     print(neural_network.synaptic_weigths)
-    A = str(input("input 1: "))
-    B = str(input("input 2: "))
-    C = str(input("input 3: "))
-    D = str(input("input 4: "))
-
-    print("New situation: input data = ", A, B, C, D)
-    print("Output data: ")
-    print(neural_network.think(np.array([A,B,C,D])))
+    rarr = arr.reshape(4,2500)
+    
+    syn = np.arange(10000)
+    rsyn = syn.reshape(4,2500)
+    
+    plt.scatter(syn,arr, c="purple")
+    plt.scatter(syn,arr2, c="orange")
+    plt.scatter(syn,arr3, c="blue")
+    plt.scatter(syn,arr4, c="red")
+    
     plt.show()
